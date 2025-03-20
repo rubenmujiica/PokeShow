@@ -1,3 +1,12 @@
+<?php
+// Verificar si el usuario está logueado
+session_start();
+if (!isset($_SESSION["usuario"])) {
+    header("Location: auth.php");
+    exit; // Termina el script si no está logueado
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -52,10 +61,33 @@
             border: 2px solid #e60012; /* Borde rojo */
         }
 
+        
+
         h1 {
             color: #1a1a1c;
             margin-top: 50px;
             text-shadow: 3px 3px 5px #e60012; /* Sombra roja */
+        }
+
+        .contenedor {
+            display: flex;
+            justify-content: center; /* Centra los divs horizontalmente */
+            align-items: center; /* Alinea los divs verticalmente */
+            gap: 70px; /* Espaciado entre los divs */
+            flex-wrap: wrap; /* Permite que se acomoden en varias líneas si no caben */
+            border: 2px solid red;
+            margin-top: 50px;
+        }
+
+        .carta {
+            width: 30%; /* Se ajustan al 30% del ancho del contenedor */
+            max-width: 300px; /* Máximo tamaño para evitar que sean demasiado grandes */
+            min-width: 200px; /* Mínimo tamaño para evitar que sean demasiado pequeños */
+            aspect-ratio: 3/4; /* Mantiene la proporción de cada carta */
+            background-color: white; /* Solo para visualización */
+            border: 2px solid black;
+            border-radius: 10px;
+            margin: 50px;
         }
     </style>
 </head>
@@ -75,7 +107,13 @@
         </a>
     </nav>
 
-    <h1>¡Aquí puedes comprar cartas!</h1>
+    <h1>¡Bienvenido a PokeShop!</h1>
+
+    <div class="contenedor">
+        <div class="carta"></div>
+        <div class="carta"></div>
+        <div class="carta"></div>
+    </div>
 
 </body>
 </html>
