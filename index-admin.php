@@ -35,13 +35,17 @@ if (!isset($_SESSION["usuario"])) {
             flex-wrap: wrap;
         } 
 
-        nav img {
+        nav div img {
             height: 50px; /* Ajusta el tamaño del logo */
             
         }
 
-        nav p{
-            margin-right: 100px;
+        .izquierda{
+            position: absolute;
+            left: 20px;
+            display: flex;
+            align-items: center; /* Alinea la imagen y el título verticalmente */
+            gap: 10px; /* Espacio entre la imagen y el título */
         }
 
         nav a {
@@ -94,11 +98,13 @@ if (!isset($_SESSION["usuario"])) {
 <body>
 
     <nav>
-        <img src="logo.png" alt="Logo Pokémon">
-        <p>PokeShop</p>
+        <div class="izquierda">
+            <img src="logo.png" alt="Logo Pokémon">
+            <p>PokeShop</p>
+        </div>
         <a href="index.php">🏠 Inicio</a>
-        <a href="comprar.html">🛒 Comprar</a>
-        <a href="vender.html">📦 Vender</a>
+        <a href="comprar.html">📝 Gestión de cartas</a> <!-- Aprobar/rechazar cartas en venta, editar o eliminar listados. -->
+        <a href="vender.html"> 🛠️ Gestión de Usuarios</a> <!-- Agregar, editar, suspender o eliminar usuarios. -->
         <a href="perfil.html">👤 Perfil</a>
         <a href="cerrar_sesion.php" class="logout-btn">
             <i class="fas fa-sign-out-alt"></i>

@@ -32,6 +32,7 @@ function registrar_usuario($pdo, $nombre, $apellidos, $correo, $nickname, $contr
         return false; // Usuario ya existe
     }
 
+    //Guardamos la contraseña cifrada para una mayor SEGURIDAD
     $hash = password_hash($contrasena, PASSWORD_DEFAULT);
     $stmt = $pdo->prepare("INSERT INTO usuario (Nombre, Apellidos, Correo, Nickname, Contrasena) VALUES (?, ?, ?, ?, ?)");
     return $stmt->execute([$nombre, $apellidos, $correo, $nickname, $hash]);
@@ -56,13 +57,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else {
             echo "<p style='color: red; margin-top:40px;'>Todos los campos son obligatorios.</p>";
         }
-    } elseif (isset($_POST["login"])) {
+        } elseif (isset($_POST["login"])) {
         // Procesar inicio de sesión
         $nickname = $_POST["nickname"] ?? '';
         $contrasena = $_POST["contrasena"] ?? '';
 
         if (usuario_existe($pdo, $nickname, $contrasena)) {
-            if($nickname == 'admin'){
+            
+            //Miramos si es el ADMINISTRADOR con el atributo Es_admin
+            $stmt = $pdo->prepare("SELECT Es_admin FROM usuario WHERE Nickname = ?");
+            $stmt->execute([$nickname]);
+            $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+            if($admin["Es_admin"] == 1){
                 $_SESSION["usuario"] = $nickname;
                 header("Location: index-admin.php");
                 exit;
