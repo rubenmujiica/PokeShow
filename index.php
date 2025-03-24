@@ -101,7 +101,7 @@ if (!isset($_SESSION["usuario"])) {
         <a href="vender.html">📦 Vender</a>
         <a href="carrito.html">🛍️ Carrito</a>
         <a href="coleccion.html">🎴 Mi Colección</a>
-        <a href="perfil.html">👤 Perfil</a>
+        <a href="perfil.php">👤 Perfil</a>
         <a href="cerrar_sesion.php" class="logout-btn">
             <i class="fas fa-sign-out-alt"></i>
         </a>
