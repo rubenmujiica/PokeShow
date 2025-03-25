@@ -1,0 +1,2 @@
+INSERT INTO `carta` (`ID_Usuario`, `en_venta`, `Nombre`, `Tipo`, `PS`, `Ataque`, `Precio`, `Descripcion`, `Imagen`) 
+VALUES (2, 1, 'Groudon', 'Tierra', 100, 500, 100, 'Pokemon ejemplo', 'imgs/groudon.png');

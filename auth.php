@@ -65,16 +65,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (usuario_existe($pdo, $nickname, $contrasena)) {
             
             //Miramos si es el ADMINISTRADOR con el atributo Es_admin
-            $stmt = $pdo->prepare("SELECT Es_admin FROM usuario WHERE Nickname = ?");
+            $stmt = $pdo->prepare("SELECT * FROM usuario WHERE Nickname = ?");
             $stmt->execute([$nickname]);
-            $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-            if($admin["Es_admin"] == 1){
-                $_SESSION["usuario"] = $nickname;
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+            $_SESSION["ID_Usuario"] = $usuario["ID_Usuario"];
+            $_SESSION["Nombre"] = $usuario["Nombre"];
+            $_SESSION["Apellidos"] = $usuario["Apellidos"];
+            $_SESSION["Correo"] = $usuario["Correo"];
+            $_SESSION["usuario"] = $nickname;
+            $_SESSION["Contrasena"] = $usuario["Contrasena"];
+            $_SESSION["Saldo"] = $usuario["Saldo"];
+            $_SESSION["Es_admin"] = $usuario["Es_admin"];
+            if($usuario["Es_admin"] == 1){
                 header("Location: index-admin.php");
                 exit;
             }
             else{
-                $_SESSION["usuario"] = $nickname;
+                // $_SESSION["usuario"] = $nickname;
                 header("Location: index.php");
                 exit;
             }
