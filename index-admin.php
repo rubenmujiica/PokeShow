@@ -102,7 +102,7 @@ if (!isset($_SESSION["usuario"])) {
             <img src="logo.png" alt="Logo Pokémon">
             <p>PokeShop</p>
         </div>
-        <a href="index.php">🏠 Inicio</a>
+        <a href="index-admin.php">🏠 Inicio</a>
         <a href="comprar.html">📝 Gestión de cartas</a> <!-- Aprobar/rechazar cartas en venta, editar o eliminar listados. -->
         <a href="vender.html"> 🛠️ Gestión de Usuarios</a> <!-- Agregar, editar, suspender o eliminar usuarios. -->
         <a href="perfil.php">👤 Perfil</a>

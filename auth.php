@@ -5,8 +5,8 @@ session_start();
 // Configuración de la base de datos
 $host = "localhost";
 $dbname = "pokeshop"; 
-$username = "usuario"; 
-$password = ""; 
+$username = "admin"; 
+$password = "admin"; 
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
