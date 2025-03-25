@@ -65,17 +65,17 @@
         <img src="logo.png" alt="Logo Pokémon">
         <p>PokeShop</p>
         <a href="index.php">🏠 Inicio</a>
-        <a href="comprar.html">🛒 Comprar</a>
-        <a href="vender.html">📦 Vender</a>
-        <a href="carrito.html">🛍️ Carrito</a>
-        <a href="coleccion.html">🎴 Mi Colección</a>
+        <a href="comprar.php">🛒 Comprar</a>
+        <a href="vender.php">📦 Vender</a>
+        <a href="carrito.php">🛍️ Carrito</a>
+        <a href="coleccion.php">🎴 Mi Colección</a>
         <a href="perfil.php">👤 Perfil</a>
         <a href="cerrar_sesion.php" class="logout-btn">
             <i class="fas fa-sign-out-alt"></i>
         </a>
     </nav>
 
-    <h1>¡Publica tus cartas!</h1>
+    <h1>¡Aquí puedes comprar cartas!</h1>
 
 </body>
 </html>

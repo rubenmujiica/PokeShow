@@ -103,8 +103,8 @@ if (!isset($_SESSION["usuario"])) {
             <p>PokeShop</p>
         </div>
         <a href="index-admin.php">🏠 Inicio</a>
-        <a href="comprar.html">📝 Gestión de cartas</a> <!-- Aprobar/rechazar cartas en venta, editar o eliminar listados. -->
-        <a href="vender.html"> 🛠️ Gestión de Usuarios</a> <!-- Agregar, editar, suspender o eliminar usuarios. -->
+        <a href="comprar.php">📝 Gestión de cartas</a> <!-- Aprobar/rechazar cartas en venta, editar o eliminar listados. -->
+        <a href="vender.php"> 🛠️ Gestión de Usuarios</a> <!-- Agregar, editar, suspender o eliminar usuarios. -->
         <a href="perfil.php">👤 Perfil</a>
         <a href="cerrar_sesion.php" class="logout-btn">
             <i class="fas fa-sign-out-alt"></i>
