@@ -61,6 +61,12 @@
     </script>
     <style>
         body {
+            /* Imagen de fondo */
+            background-image: url('imgs/fondo2.jpg'); /* Ruta de la imagen */
+            background-size: cover; /* Ajusta la imagen al tamaño de la pantalla */
+            background-position: center; /* Centra la imagen */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+
             margin: 0;
             padding: 0;
             font-family: 'Press Start 2P', cursive;
@@ -69,12 +75,13 @@
         }
 
         nav {
-            background-color: #e60012;
+            background-color:rgb(219, 57, 71);
             padding: 15px;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 18px;
             flex-wrap: wrap;
+            border-bottom: 2px solid white;
         } 
 
         nav img {
@@ -104,7 +111,7 @@
         }
         
         h1 {
-            color: #1a1a1c;
+            color: rgb(255, 255, 255);
             margin-top: 50px;
             text-shadow: 3px 3px 5px #e60012; /* Sombra roja */
         }
@@ -155,6 +162,7 @@
             border-radius: 12px;
             box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
             padding: 15px;
+            margin-top: 26px;
             text-align: center;
             width: 250px;
             transition: transform 0.3s ease-in-out;
@@ -195,14 +203,14 @@
         }
 
         button {
-            display: block;
+            display: inline-block;
             width: fit-content; /* Que solo ocupe lo necesario */
-            margin: 20px auto; /* Centrarlo */
+            margin: 20px 30px; /* Centrarlo */
             padding: 15px 20px;
             font-size: 20px;
             font-weight: bold;
             color: white;
-            background-color: #e60012; 
+            background-color: rgb(219, 57, 71);
             border: none;
             border-radius: 8px; 
             cursor: pointer;
@@ -210,7 +218,7 @@
         }
 
         button:hover {
-            background-color: #cc0010; /* Un rojo más oscuro */
+            background-color:rgb(144, 7, 18); /* Un rojo más oscuro */
             transform: scale(1.05); /* Efecto sutil de agrandado */
         }
 

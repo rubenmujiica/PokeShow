@@ -19,6 +19,12 @@ if (!isset($_SESSION["usuario"])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body {
+            /* Imagen de fondo */
+            background-image: url('imgs/fondo2.jpg'); /* Ruta de la imagen */
+            background-size: cover; /* Ajusta la imagen al tamaño de la pantalla */
+            background-position: center; /* Centra la imagen */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+
             margin: 0;
             padding: 0;
             font-family: 'Press Start 2P', cursive;
@@ -27,13 +33,14 @@ if (!isset($_SESSION["usuario"])) {
         }
 
         nav {
-            background-color: #e60012;
+            background-color:rgb(219, 57, 71);
             padding: 15px;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 18px;
             flex-wrap: wrap;
-        } 
+            border-bottom: 2px solid white;
+        }
 
         nav img {
             height: 50px; /* Ajusta el tamaño del logo */
@@ -64,7 +71,7 @@ if (!isset($_SESSION["usuario"])) {
         
 
         h1 {
-            color: #1a1a1c;
+            color:rgb(255, 255, 255);
             margin-top: 50px;
             text-shadow: 3px 3px 5px #e60012; /* Sombra roja */
         }
@@ -75,8 +82,7 @@ if (!isset($_SESSION["usuario"])) {
             align-items: center; /* Alinea los divs verticalmente */
             gap: 70px; /* Espaciado entre los divs */
             flex-wrap: wrap; /* Permite que se acomoden en varias líneas si no caben */
-            border: 2px solid red;
-            margin-top: 50px;
+            margin-top: 40px;
         }
 
         .carta {

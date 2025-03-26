@@ -19,6 +19,12 @@ if (!isset($_SESSION["usuario"])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body {
+            /* Imagen de fondo */
+            background-image: url('imgs/fondo2.jpg'); /* Ruta de la imagen */
+            background-size: cover; /* Ajusta la imagen al tamaño de la pantalla */
+            background-position: center; /* Centra la imagen */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+
             margin: 0;
             padding: 0;
             font-family: 'Press Start 2P', cursive;
@@ -27,25 +33,22 @@ if (!isset($_SESSION["usuario"])) {
         }
 
         nav {
-            background-color: #e60012;
+            background-color:rgb(219, 57, 71);
             padding: 15px;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 18px;
             flex-wrap: wrap;
+            border-bottom: 2px solid white;
         } 
 
-        nav div img {
+        nav img {
             height: 50px; /* Ajusta el tamaño del logo */
             
         }
 
-        .izquierda{
-            position: absolute;
-            left: 20px;
-            display: flex;
-            align-items: center; /* Alinea la imagen y el título verticalmente */
-            gap: 10px; /* Espacio entre la imagen y el título */
+        nav p{
+            margin-right: 100px;
         }
 
         nav a {
@@ -68,7 +71,7 @@ if (!isset($_SESSION["usuario"])) {
         
 
         h1 {
-            color: #1a1a1c;
+            color: rgb(255, 255, 255);
             margin-top: 50px;
             text-shadow: 3px 3px 5px #e60012; /* Sombra roja */
         }
@@ -79,8 +82,7 @@ if (!isset($_SESSION["usuario"])) {
             align-items: center; /* Alinea los divs verticalmente */
             gap: 70px; /* Espaciado entre los divs */
             flex-wrap: wrap; /* Permite que se acomoden en varias líneas si no caben */
-            border: 2px solid red;
-            margin-top: 50px;
+            margin-top: 40px;
         }
 
         .carta {
@@ -98,14 +100,12 @@ if (!isset($_SESSION["usuario"])) {
 <body>
 
     <nav>
-        <div class="izquierda">
-            <img src="logo.png" alt="Logo Pokémon">
-            <p>PokeShop</p>
-        </div>
+        <img src="logo.png" alt="Logo Pokémon">
+        <p>PokeShop</p>
         <a href="index-admin.php">🏠 Inicio</a>
-        <a href="comprar.php">📝 Gestión de cartas</a> <!-- Aprobar/rechazar cartas en venta, editar o eliminar listados. -->
-        <a href="vender.php"> 🛠️ Gestión de Usuarios</a> <!-- Agregar, editar, suspender o eliminar usuarios. -->
-        <a href="perfil.php">👤 Perfil</a>
+        <a href="gestion-cartas.php">📝 Gestión de cartas</a> <!-- Aprobar/rechazar cartas en venta, editar o eliminar listados. -->
+        <a href="gestion-usuarios.php"> 🛠️ Gestión de Usuarios</a> <!-- Agregar, editar, suspender o eliminar usuarios. -->
+        <a href="perfil-admin.php">👤 Perfil</a>
         <a href="cerrar_sesion.php" class="logout-btn">
             <i class="fas fa-sign-out-alt"></i>
         </a>
