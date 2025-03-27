@@ -196,6 +196,9 @@ unset($_SESSION['error2']); //Borramos esta variable para que no haya conflictos
 
     <form action="editar-perfil.php" method="post">
         <div class="perfil">
+                <?php if(isset($_SESSION['error3'])): ?>
+                    <p style='color:red'><?php echo $_SESSION['error3']; ?></p>
+                <?php endif; ?>
             <p class="perfil-completo">Nombre: <?php echo $_SESSION['Nombre'] ?>
                 <button type='submit' class="editar" name="nombre"><i class="fa-solid fa-pen"></i></button>
             </p>
@@ -242,3 +245,5 @@ unset($_SESSION['error2']); //Borramos esta variable para que no haya conflictos
 
 </body>
 </html>
+
+<?php unset($_SESSION['error3']); ?>

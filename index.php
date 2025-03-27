@@ -1,6 +1,7 @@
 <?php
 // Verificar si el usuario está logueado
 session_start();
+
 if (!isset($_SESSION["usuario"])) {
     header("Location: auth.php");
     exit; // Termina el script si no está logueado

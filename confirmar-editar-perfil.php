@@ -58,6 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Actualizar puntos según el lote seleccionado
     if (isset($_POST['cantidad'])) {
+
+        if($_POST['cantidad'] == 10 or $_POST['cantidad'] == 50 or $_POST['cantidad'] == 100){
+
         $puntosAumentados = $_POST['cantidad'];
 
         // Obtener los puntos actuales del usuario
@@ -75,7 +78,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $sql = "UPDATE Usuario SET Saldo = :puntos WHERE ID_Usuario = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':puntos' => $nuevosPuntos, ':id' => $_SESSION["ID_Usuario"]]);
+
+        }
+
+        else{
+            $_SESSION['error3'] = 'Seleccione uno de los lotes';
+            header("Location: perfil.php");
+            exit;
+        }
     }
+    
 
     // Confirmar que la contraseña es correcta
     if (isset($_POST['contrasena'])) {
