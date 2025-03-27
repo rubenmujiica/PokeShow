@@ -1,4 +1,7 @@
-<?php session_start() ?>
+<?php session_start();
+unset($_SESSION['error']); //Borramos esta variable para que no haya conflictos luego
+unset($_SESSION['error2']); //Borramos esta variable para que no haya conflictos luego
+// ?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -11,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         body {
             /* Imagen de fondo */
@@ -70,11 +74,15 @@
 
 
         .perfil-completo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
             margin: 40px;
             text-align: left;
         }
 
-        button {
+        .botones-principales {
             display: inline-block;
             width: fit-content; /* Que solo ocupe lo necesario */
             margin: 20px 30px; /* Centrarlo */
@@ -89,8 +97,8 @@
             transition: background 0.3s ease, transform 0.2s ease;
         }
 
-        button:hover {
-            background-color: rgb(144, 7, 18); /* Un rojo más oscuro */
+        .botones-principales:hover {
+            background-color:rgb(144, 7, 18); /* Un rojo más oscuro */
             transform: scale(1.05); /* Efecto sutil de agrandado */
         }
         
@@ -107,6 +115,17 @@
             padding: 30px;
             border: 2px solid #e60012;
         }
+
+        .editar {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: rgb(219, 57, 71);
+            font-size: 18px;
+        }
+        .editar:hover {
+            color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -115,8 +134,8 @@
         <img src="logo.png" alt="Logo Pokémon">
         <p>PokeShop</p>
         <a href="index-admin.php">🏠 Inicio</a>
-        <a href="gestion-cartas.php">📝 Gestión de cartas</a> <!-- Aprobar/rechazar cartas en venta, editar o eliminar listados. -->
-        <a href="gestion-usuarios.php"> 🛠️ Gestión de Usuarios</a> <!-- Agregar, editar, suspender o eliminar usuarios. -->
+        <a href="gestion-cartas.php">📋 Gestión de cartas</a>
+        <a href="gestion-usuarios.php">🛠️ Gestión de usuarios</a>
         <a href="perfil-admin.php">👤 Perfil</a>
         <a href="cerrar_sesion.php" class="logout-btn">
             <i class="fas fa-sign-out-alt"></i>
@@ -125,18 +144,28 @@
 
     <h1>Este es tu perfil</h1>
 
-    <div class="perfil">
-        <p class="perfil-completo">Nombre: <?php echo $_SESSION['Nombre'] ?></p>
-        <p class="perfil-completo">Apellidos: <?php echo $_SESSION['Apellidos'] ?></p>
-        <p class="perfil-completo">Correo electrónico: <?php echo $_SESSION['Correo'] ?></p>
-        <p class="perfil-completo">Nickname: <?php echo $_SESSION['usuario'] ?></p>
-        <p class="perfil-completo">Contraseña: ****</p>
-        <p class="perfil-completo">Saldo en la cuenta: <?php echo $_SESSION['Saldo'] ?> puntos</p>
-        <div>
-            <button>Ingresar saldo</button>
-            <button>¿Quieres cambiar tu contraseña?</button>
+    <form action="editar-perfil-admin.php" method="post">
+        <div class="perfil">
+            <p class="perfil-completo">Nombre: <?php echo $_SESSION['Nombre'] ?>
+                <button type='submit' class="editar" name="nombre"><i class="fa-solid fa-pen"></i></button>
+            </p>
+            <p class="perfil-completo">Apellidos: <?php echo $_SESSION['Apellidos'] ?>
+                <button type='submit' class="editar" name="apellidos"><i class="fa-solid fa-pen"></i></button>
+            </p>
+            <p class="perfil-completo">Correo electrónico: <?php echo $_SESSION['Correo'] ?>
+                <button type='submit' class="editar" name="correo"><i class="fa-solid fa-pen"></i></button>
+            </p>
+            <p class="perfil-completo">Nickname: <?php echo $_SESSION['usuario'] ?>
+                <button type='submit' class="editar" name="nickname"><i class="fa-solid fa-pen"></i></button>
+            </p>
+            <p class="perfil-completo">Contraseña: ****</p>
+            <p class="perfil-completo">Saldo en la cuenta: <?php echo $_SESSION['Saldo'] ?></p>
+            <div>
+                <button type='submit' class="botones-principales" name="ingresar-saldo">Ingresar saldo</button>
+                <button type='submit' class="botones-principales" name="cambiar-contrasena">¿Quieres cambiar tu contraseña?</button>
+            </div>
         </div>
-    </div>
+    </form>
 
 </body>
 </html>

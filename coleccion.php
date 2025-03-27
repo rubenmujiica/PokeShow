@@ -143,7 +143,7 @@ session_start();
         button {
             display: inline-block;
             width: fit-content; /* Que solo ocupe lo necesario */
-            margin: 20px 30px; /* Centrarlo */
+            margin: 40px 30px; /* Centrarlo */
             padding: 15px 20px;
             font-size: 20px;
             font-weight: bold;

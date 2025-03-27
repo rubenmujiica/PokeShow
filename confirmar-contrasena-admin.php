@@ -1,7 +1,7 @@
-<?php session_start();
-unset($_SESSION['error']); //Borramos esta variable para que no haya conflictos luego
-unset($_SESSION['error2']); //Borramos esta variable para que no haya conflictos luego
-// ?>
+<?php
+    session_start();
+
+?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -73,34 +73,7 @@ unset($_SESSION['error2']); //Borramos esta variable para que no haya conflictos
         }
 
 
-        .perfil-completo {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            margin: 40px;
-            text-align: left;
-        }
-
-        .botones-principales {
-            display: inline-block;
-            width: fit-content; /* Que solo ocupe lo necesario */
-            margin: 20px 30px; /* Centrarlo */
-            padding: 15px 20px;
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-            background-color: rgb(219, 57, 71);
-            border: none;
-            border-radius: 8px; 
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
-
-        .botones-principales:hover {
-            background-color:rgb(144, 7, 18); /* Un rojo más oscuro */
-            transform: scale(1.05); /* Efecto sutil de agrandado */
-        }
+        
         
         .perfil{
             /* Posicionar el div en el centro */
@@ -116,16 +89,36 @@ unset($_SESSION['error2']); //Borramos esta variable para que no haya conflictos
             border: 2px solid #e60012;
         }
 
-        .editar {
-            background: none;
+        .perfil-dentro {
+            display: inline-block;
+            margin-bottom: 10px; /* Espacio entre los elementos */
+        }
+
+        input.perfil-dentro {
+            width: 30%; /* Ajusta el ancho del input */
+            margin-left: 10px; /* Espacio entre la etiqueta y el input */
+        }
+
+        button {
+            display: block;
+            width: fit-content; /* Que solo ocupe lo necesario */
+            margin: 20px auto; /* Centrarlo */
+            padding: 15px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            color: white;
+            background-color: rgb(219, 57, 71);
             border: none;
+            border-radius: 8px; 
             cursor: pointer;
-            color: rgb(219, 57, 71);
-            font-size: 18px;
+            transition: background 0.3s ease, transform 0.2s ease;
         }
-        .editar:hover {
-            color: #0056b3;
+
+        button:hover {
+            background-color:rgb(144, 7, 18); /* Un rojo más oscuro */
+            transform: scale(1.05); /* Efecto sutil de agrandado */
         }
+
     </style>
 </head>
 <body>
@@ -134,38 +127,36 @@ unset($_SESSION['error2']); //Borramos esta variable para que no haya conflictos
         <img src="logo.png" alt="Logo Pokémon">
         <p>PokeShop</p>
         <a href="index.php">🏠 Inicio</a>
-        <a href="comprar.php">🛒 Comprar</a>
-        <a href="vender.php">📦 Vender</a>
-        <a href="carrito.php">🛍️ Carrito</a>
-        <a href="coleccion.php">🎴 Mi Colección</a>
-        <a href="perfil.php">👤 Perfil</a>
+        <a href="gestion-cartas.php">📋 Gestión de cartas</a>
+        <a href="gestion-usuarios.php">🛠️ Gestión de usuarios</a>
+        <a href="perfil-admin.php">👤 Perfil</a>
         <a href="cerrar_sesion.php" class="logout-btn">
             <i class="fas fa-sign-out-alt"></i>
         </a>
     </nav>
 
-    <h1>Este es tu perfil</h1>
+    <h1>Estás editando tu perfil</h1>
 
-    <form action="editar-perfil.php" method="post">
+    <form action="confirmar-editar-perfil-admin.php" method="post">
         <div class="perfil">
-            <p class="perfil-completo">Nombre: <?php echo $_SESSION['Nombre'] ?>
-                <button type='submit' class="editar" name="nombre"><i class="fa-solid fa-pen"></i></button>
-            </p>
-            <p class="perfil-completo">Apellidos: <?php echo $_SESSION['Apellidos'] ?>
-                <button type='submit' class="editar" name="apellidos"><i class="fa-solid fa-pen"></i></button>
-            </p>
-            <p class="perfil-completo">Correo electrónico: <?php echo $_SESSION['Correo'] ?>
-                <button type='submit' class="editar" name="correo"><i class="fa-solid fa-pen"></i></button>
-            </p>
-            <p class="perfil-completo">Nickname: <?php echo $_SESSION['usuario'] ?>
-                <button type='submit' class="editar" name="nickname"><i class="fa-solid fa-pen"></i></button>
-            </p>
-            <p class="perfil-completo">Contraseña: ****</p>
-            <p class="perfil-completo">Saldo en la cuenta: <?php echo $_SESSION['Saldo'] ?> puntos</p>
-            <div>
-                <button type='submit' class="botones-principales" name="ingresar-saldo">Ingresar saldo</button>
-                <button type='submit' class="botones-principales" name="cambiar-contrasena">¿Quieres cambiar tu contraseña?</button>
-            </div>
+            <!-- Necesitamos copiarlo de nuevo aqui porque sino daria error en $aux en editar-perfil-admin.php -->
+            <?php if(!isset($_SESSION['nueva-contrasena'])): ?>
+                <?php if(isset($_SESSION['error'])): ?>
+                    <p style='color:red'><?php echo $_SESSION['error']; ?></p>
+                <?php endif; ?>
+                <p class="perfil-dentro">Introduce tu contraseña:</p>
+                <input class="perfil-dentro" type="text" name="contrasena" required>
+                <button type="submit">Confirmar</button>
+            <?php else: ?>
+                <?php if(isset($_SESSION['error2'])): ?>
+                    <p style='color:red'><?php echo $_SESSION['error2']; ?></p>
+                <?php endif; ?>
+                <p class="perfil-dentro">Introduce tu nueva contraseña:</p>
+                <input class="perfil-dentro" type="text" name="cambio1" required>
+                <p class="perfil-dentro">Repita tu nueva contraseña:</p>
+                <input class="perfil-dentro" type="text" name="cambio2" required>
+                <button type="submit">Confirmar</button>
+            <?php endif; ?>
         </div>
     </form>
 
