@@ -1,3 +1,73 @@
+<?php
+    session_start();
+    if (!isset($_SESSION["usuario"])) {
+        header("Location: auth.php");
+        exit; // Termina el script si no está logueado
+    }
+    // Configuración de la base de datos
+    $host = "localhost";
+    $dbname = "pokeshop"; 
+    $username = "admin"; 
+    $password = "admin"; 
+        
+    try {
+        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        die("Error en la conexión: " . $e->getMessage());
+    }
+
+    if (!isset($_SESSION["Carrito"])) {
+        $_SESSION["Carrito"] = []; // Inicializa el carrito si no existe
+    }
+
+    if (!empty($_SESSION["Carrito"])) {
+        // Convierte los IDs en una lista separada por comas para la consulta SQL
+        $ids = implode(',', array_map('intval', $_SESSION["Carrito"]));
+        
+        // Consulta para obtener información de las cartas
+        $stmt = $pdo->query("SELECT * FROM carta WHERE ID_Carta IN ($ids)");
+        $cartas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        $cartas = []; // Si el carrito está vacío
+    }
+    $total = 0;
+
+    foreach($cartas as $carta)
+        $total += $carta["Precio"];
+
+    if($_SERVER["REQUEST_METHOD"] === "POST") {
+        if(!empty($_SESSION["Carrito"])) {
+            if($_SESSION["Saldo"] < $total) {
+                // Cambiar por sweetAlert
+                // echo "No hay saldo suficiente";
+                $_SESSION["error_carrito_saldo"] = "No hay saldo suficiente";
+                header("Location: carrito.php");
+                exit;
+            }
+            else {
+                $stmt = $pdo->prepare("UPDATE carta SET en_venta = 0, ID_Usuario = ? WHERE ID_Carta IN ($ids)");
+                $stmt->execute([$_SESSION["ID_Usuario"]]);
+                $stmt = $pdo->prepare("UPDATE usuario SET Saldo = Saldo -" . $total . " WHERE ID_Usuario =" . $_SESSION["ID_Usuario"]);
+                $stmt->execute();
+                $stmt = $pdo->prepare("SELECT Saldo FROM usuario WHERE ID_Usuario = ?");
+                $stmt->execute([$_SESSION["ID_Usuario"]]);
+                $_SESSION["Saldo"] = $stmt->fetchColumn(); // Actualiza el saldo en la sesión
+
+                $total = 0;
+                $_SESSION["Carrito"] = [];
+                $cartas = [];
+            }
+        }
+        // else {
+            // echo "El carrito está vacío"; // CAmbiar por sweetAlert
+            // exit;
+        // }
+        // header("Location: " . $_SERVER["PHP_SELF"]);
+        // exit();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,6 +78,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             /* Imagen de fondo */
@@ -64,6 +135,76 @@
             margin-top: 50px;
             text-shadow: 3px 3px 5px #e60012; /* Sombra roja */
         }
+
+        .contenedor_ventas_cartas {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            gap:20px;
+        }
+
+        .carta_pokemon {
+            background: #ffffff; /* Fondo blanco */
+            border: 3px solid #d92c2c; /* Borde rojo */
+            border-radius: 12px;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            margin-top: 26px;
+            text-align: center;
+            width: 250px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .carta_pokemon:hover {
+            transform: scale(1.05);
+            box-shadow: 6px 6px 12px rgba(217, 44, 44, 0.5);
+        }
+
+        .carta_pokemon h2 {
+            font-size: 18px;
+            font-weight: bold;
+            /* color: #d92c2c; Rojo para resaltar el título */
+            margin-bottom: 10px;
+        }
+
+        .carta_pokemon img {
+            border-radius: 8px;
+            width: 100%;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            height: auto;
+        }
+
+        .carta_pokemon p {
+            font-size: 14px;
+            color: #333; /* Texto oscuro para mejor lectura */
+            margin: 10px 0;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        button {
+            display: inline-block;
+            width: fit-content; /* Que solo ocupe lo necesario */
+            margin: 20px 30px; /* Centrarlo */
+            padding: 15px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background-color: rgb(219, 57, 71);
+            border: none;
+            border-radius: 8px; 
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color:rgb(144, 7, 18); /* Un rojo más oscuro */
+            transform: scale(1.05); /* Efecto sutil de agrandado */
+        }
+
         footer {
         background-color: rgb(219, 57, 71);
         padding: 15px;
@@ -114,6 +255,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <nav>
@@ -130,7 +272,45 @@
         </a>
     </nav>
 
+    <?php if (isset($_SESSION["error_carrito_saldo"])): ?>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Saldo insuficiente',
+                // text: '<?php echo $_SESSION["error_carrito_saldo"]; ?>',
+                confirmButtonColor: '#e60012'
+            });
+        </script>
+        <?php unset($_SESSION["error_carrito_saldo"]); ?> 
+    <?php endif; ?>
+    <?php if(empty($cartas)): ?>
+    <h1>¡Carrito vacío!</h1>
+    <div class="contenedor_ventas_cartas">
+        <img src="imgs/giphy.gif" alt="Pikachu triste" width="300">
+    </div>
+    <?php else: ?>
     <h1>¡Este es tu carrito!</h1>
+    <div class="contenedor_ventas_cartas">
+        <?php
+            foreach($cartas as $carta) {
+                // if($carta["en_venta"] == 1) {
+                    echo '<article class = "carta_pokemon">';
+                    echo '<h2>' . $carta["Nombre"] . '</h2>';
+                    echo '<img src="' . $carta["Imagen"] . '" alt="Imagen de la carta" width=200>';
+                    echo '<p>Tipo: ' . $carta["Tipo"] . '</p>';   
+                    echo '<p>PS: ' . $carta["PS"] . '</p>';   
+                    echo '<p>Ataque: ' . $carta["Ataque"] . '</p>';   
+                    echo '<p>Precio: ' . $carta["Precio"] . ' puntos</p>';
+                    echo '</article>'; 
+                // }
+            }
+        ?>
+    </div>
+    <?php endif; ?>
+    <form action="carrito.php" method="POST">
+        <button type="submit" class="boton_comprar">Comprar <?php echo ($total == 0) ? "": "(" . $total . ")" ?></button>
+    </form>
     <footer>
     <div class="footer-content">
         <p>&copy; 2025 - PokeShop</p>
