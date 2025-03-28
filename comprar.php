@@ -310,12 +310,6 @@
         </div>
         <button type="submit" class="boton_comprar">Meter en carrito</button>
     </form>
-    <h2>Carrito</h2>
-        <ul>
-            <?php foreach ($_SESSION["Carrito"] as $id_carta): ?>
-                <li>Carta ID: <?= $id_carta ?></li>
-            <?php endforeach; ?>
-        </ul>
     <footer>
     <div class="footer-content">
         <p>&copy; 2025 - PokeShop</p>
