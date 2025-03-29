@@ -107,9 +107,31 @@ session_start();
             transition: transform 0.3s ease-in-out;
         }
 
+        .descripcion_carta {
+            display: none; /* Oculta por defecto */
+            background-color: rgba(255, 255, 255, 0.9);
+            color: black;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 2px solid #d92c2c;
+            position: absolute;
+            width:105%;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
         .carta_pokemon:hover {
             transform: scale(1.05);
             box-shadow: 6px 6px 12px rgba(217, 44, 44, 0.5);
+        }
+
+        .carta_pokemon:hover .descripcion_carta {
+            display: block; /* Muestra la descripción al hacer hover */
         }
 
         .carta_pokemon h2 {
@@ -235,11 +257,7 @@ session_start();
                         echo '<article class = "carta_pokemon">';
                         echo '<h2>' . $carta["Nombre"] . '</h2>';
                         echo '<img src="' . $carta["Imagen"] . '" alt="Imagen de la carta" width=200>';
-/*                         echo '<p>Tipo: ' . $carta["Tipo"] . '</p>';   
-                        echo '<p>PS: ' . $carta["PS"] . '</p>';   
-                        echo '<p>Ataque: ' . $carta["Ataque"] . '</p>';   
-                        echo '<p>Precio: ' . $carta["Precio"] . ' puntos</p>'; */
-/*                         echo '<input type="checkbox" name="cartas_seleccionadas[]" value="' . $carta['ID_Carta'] . '" hidden>';   */
+                        echo '<div class="descripcion_carta">' . $carta["Descripcion"] . '</div>'; // Nuevo div con la descripción
                         echo '</article>'; 
                     // }
                 }
