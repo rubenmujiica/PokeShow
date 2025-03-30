@@ -1,3 +1,50 @@
+<?php
+    session_start();
+    if (!isset($_SESSION["usuario"])) {
+        header("Location: auth.php");
+        exit; // Termina el script si no está logueado
+    }
+    // Configuración de la base de datos
+    $host = "localhost";
+    $dbname = "pokeshop"; 
+    $username = "admin"; 
+    $password = "admin"; 
+    
+    try {
+        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        die("Error en la conexión: " . $e->getMessage());
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["cartas_seleccionadas"])) {
+        $cartas_seleccionadas = $_POST["cartas_seleccionadas"];
+
+        $ids = implode(',', array_map('intval', $cartas_seleccionadas));
+    
+        $stmt = $pdo->prepare("
+            UPDATE carta
+            SET en_venta = CASE WHEN en_venta = 1 THEN 0 ELSE 1 END
+            WHERE ID_Carta IN ($ids)
+        ");
+        $stmt->execute();
+
+        // Redirigir para evitar reenvío del formulario
+        header("Location: " . $_SERVER["PHP_SELF"]);
+        exit();
+    }
+
+    $stmt = $pdo->prepare("SELECT * FROM carta WHERE ID_Usuario = ? AND en_venta = 1");
+    $stmt->execute([$_SESSION['ID_Usuario']]);
+    $cartas_en_venta = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    $stmt = $pdo->prepare("SELECT * FROM carta WHERE ID_Usuario = ? AND en_venta = 0");
+    $stmt->execute([$_SESSION['ID_Usuario']]);
+    $cartas_sin_vender = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,6 +55,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        function seleccionarCarta(carta, id) {
+            let checkbox = carta.querySelector("input[type='checkbox']");
+            carta.classList.toggle("seleccionada");
+            checkbox.checked = !checkbox.checked;
+        }
+    </script>
     <style>
         body {
             /* Imagen de fondo */
@@ -59,11 +113,91 @@
             border: 2px solid #e60012; /* Borde rojo */
         }
 
-        h1 {
+        h1,h2 {
             color: rgb(255, 255, 255);
             margin-top: 50px;
             text-shadow: 3px 3px 5px #e60012; /* Sombra roja */
         }
+
+        .contenedor_ventas_cartas {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            gap:20px;
+        }
+
+        .carta_pokemon {
+            background: #ffffff; /* Fondo blanco */
+            border: 3px solid #d92c2c; /* Borde rojo */
+            border-radius: 12px;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            margin-top: 26px;
+            text-align: center;
+            width: 250px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .carta_pokemon:hover {
+            transform: scale(1.05);
+            box-shadow: 6px 6px 12px rgba(217, 44, 44, 0.5);
+        }
+
+        .carta_pokemon h2 {
+            font-size: 18px;
+            font-weight: bold;
+            /* color: #d92c2c; Rojo para resaltar el título */
+            color:black;
+            margin-top:0px;
+            text-shadow: none;
+            margin-bottom: 10px;
+        }
+
+        .carta_pokemon img {
+            border-radius: 8px;
+            width: 100%;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            height: auto;
+        }
+
+        .carta_pokemon p {
+            font-size: 14px;
+            color: #333; /* Texto oscuro para mejor lectura */
+            margin: 10px 0;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .carta_pokemon.seleccionada {
+            background: #d92c2c;
+            color: white;
+            border-color: white;
+        }
+
+        button {
+            display: inline-block;
+            width: fit-content; /* Que solo ocupe lo necesario */
+            margin: 20px 30px; /* Centrarlo */
+            padding: 15px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background-color: rgb(219, 57, 71);
+            border: none;
+            border-radius: 8px; 
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color:rgb(144, 7, 18); /* Un rojo más oscuro */
+            transform: scale(1.05); /* Efecto sutil de agrandado */
+        }
+
+
         footer {
         background-color: rgb(219, 57, 71);
         padding: 15px;
@@ -131,6 +265,47 @@
     </nav>
 
     <h1>¡Publica tus cartas!</h1>
+    <h2>Cartas en venta</h2>
+    <form method="POST">
+        <div class="contenedor_ventas_cartas">
+            <!-- <img src="imgs/groudon.png" width="" -->
+            <?php
+                foreach($cartas_en_venta as $carta) {
+                    // if($carta["en_venta"] == 1) {
+                        echo '<article class = "carta_pokemon" onclick="seleccionarCarta(this,' .$carta['ID_Carta'] . ');">';
+                        echo '<h2>' . $carta["Nombre"] . '</h2>';
+                        echo '<img src="' . $carta["Imagen"] . '" alt="Imagen de la carta" width=200>';
+                        echo '<p>Tipo: ' . $carta["Tipo"] . '</p>';   
+                        echo '<p>PS: ' . $carta["PS"] . '</p>';   
+                        echo '<p>Ataque: ' . $carta["Ataque"] . '</p>';   
+                        echo '<p>Precio: ' . $carta["Precio"] . ' puntos</p>';
+                        echo '<input type="checkbox" name="cartas_seleccionadas[]" value="' . $carta['ID_Carta'] . '" hidden>';  
+                        echo '</article>'; 
+                    // }
+                }
+            ?>
+        </div>
+    <h2>Cartas sin vender</h2>
+        <div class="contenedor_ventas_cartas">
+            <!-- <img src="imgs/groudon.png" width="" -->
+            <?php
+                foreach($cartas_sin_vender as $carta) {
+                    // if($carta["en_venta"] == 1) {
+                        echo '<article class = "carta_pokemon" onclick="seleccionarCarta(this,' .$carta['ID_Carta'] . ');">';
+                        echo '<h2>' . $carta["Nombre"] . '</h2>';
+                        echo '<img src="' . $carta["Imagen"] . '" alt="Imagen de la carta" width=200>';
+                        echo '<p>Tipo: ' . $carta["Tipo"] . '</p>';   
+                        echo '<p>PS: ' . $carta["PS"] . '</p>';   
+                        echo '<p>Ataque: ' . $carta["Ataque"] . '</p>';   
+                        echo '<p>Precio: ' . $carta["Precio"] . ' puntos</p>';
+                        echo '<input type="checkbox" name="cartas_seleccionadas[]" value="' . $carta['ID_Carta'] . '" hidden>';  
+                        echo '</article>'; 
+                    // }
+                }
+            ?>
+        </div>
+        <button type="submit" class="boton_comprar">Vender/No vender</button>
+    </form>
     <footer>
     <div class="footer-content">
         <p>&copy; 2025 - PokeShop</p>
