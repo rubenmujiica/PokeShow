@@ -146,6 +146,7 @@
         }
 
         .carta_pokemon {
+            position: relative;
             background: #ffffff; /* Fondo blanco */
             border: 3px solid #d92c2c; /* Borde rojo */
             border-radius: 12px;
@@ -185,7 +186,7 @@
             white-space: nowrap;
         }
 
-        button {
+        .boton_comprar {
             display: inline-block;
             width: fit-content; /* Que solo ocupe lo necesario */
             margin: 20px 30px; /* Centrarlo */
@@ -200,9 +201,32 @@
             transition: background 0.3s ease, transform 0.2s ease;
         }
 
-        button:hover {
+        .boton_comprar:hover {
             background-color:rgb(144, 7, 18); /* Un rojo más oscuro */
             transform: scale(1.05); /* Efecto sutil de agrandado */
+        }
+
+        .eliminar_carta {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: red;
+            color: white;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .eliminar_carta:hover {
+            background-color: darkred;
         }
 
         footer {
@@ -292,18 +316,19 @@
     <?php else: ?>
     <h1>¡Este es tu carrito!</h1>
     <div class="contenedor_ventas_cartas">
-        <?php
-            foreach($cartas as $carta) {
-                // if($carta["en_venta"] == 1) {
-                    echo '<article class = "carta_pokemon">';
-                    echo '<h2>' . $carta["Nombre"] . '</h2>';
-                    echo '<img src="' . $carta["Imagen"] . '" alt="Imagen de la carta" width=200>';
-                    echo '<p>Tipo: ' . $carta["Tipo"] . '</p>';   
-                    echo '<p>PS: ' . $carta["PS"] . '</p>';   
-                    echo '<p>Ataque: ' . $carta["Ataque"] . '</p>';   
-                    echo '<p>Precio: ' . $carta["Precio"] . ' puntos</p>';
-                    echo '</article>'; 
-                // }
+        <?php foreach($cartas as $carta) {
+                echo '<article class = "carta_pokemon">';
+                echo '<form method="POST" action="eliminar_del_carrito.php">';
+                echo '<input type="hidden" name="id_carta" value="' . $carta["ID_Carta"] . '">';
+                echo '<button type="submit" class="eliminar_carta">✖</button>';
+                echo '</form>';
+                echo '<h2>' . $carta["Nombre"] . '</h2>';
+                echo '<img src="' . $carta["Imagen"] . '" alt="Imagen de la carta" width=200>';
+                echo '<p>Tipo: ' . $carta["Tipo"] . '</p>';   
+                echo '<p>PS: ' . $carta["PS"] . '</p>';   
+                echo '<p>Ataque: ' . $carta["Ataque"] . '</p>';   
+                echo '<p>Precio: ' . $carta["Precio"] . ' puntos</p>';
+                echo '</article>'; 
             }
         ?>
     </div>
