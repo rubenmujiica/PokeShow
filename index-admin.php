@@ -300,7 +300,7 @@ if (!isset($_SESSION["usuario"])) {
             <div class="carta"><img src="imgs/blaziken.png" alt="Blaziken"></div>
         </div>
     </div>
-    <h2> Pikachu, Bulbasur, Charizard y muchos mas, estan de vuelta!
+    <h2> ¡Pikachu, Bulbasur, Charizard y muchos más estan de vuelta!
     <div class="info-seccion">
         <h2>¿Qué puedes hacer en PokeShop?</h2>
         <p>⭐ Comprar cartas exclusivas de Pokémon y ampliar tu colección.</p>
@@ -308,7 +308,7 @@ if (!isset($_SESSION["usuario"])) {
         <p>⭐ Administrar y exhibir tu colección en tu perfil personal.</p>
         <p>⭐ Conectar con otros fans del universo Pokémon.</p>
     </div>
-    <h2>Por si todavia no los recuerdas...</h2>
+    <h2>Por si no los recuerdas...</h2>
     <ul class="youtube_juego">
         <li>
             <a href="https://www.youtube.com/@OfficialPoke%CC%81monTV" target="_blank">

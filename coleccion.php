@@ -247,7 +247,7 @@ session_start();
         </a>
     </nav>
 
-    <h1>¡Tu colección Pokemon!</h1>
+    <h1>¡Tu colección Pokémon!</h1>
     <form method="GET" action = "form_carta.php">
         <div class="contenedor_mis_cartas">
             <!-- <img src="imgs/groudon.png" width="" -->

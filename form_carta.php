@@ -287,7 +287,7 @@ session_start();
     <div class="form-container">
         <!-- Formulario para Añadir Carta -->
         <div class="form-box">
-            <h2>Añade tu nuevo pokemon!</h2>
+            <h2>¡Añade tu nuevo pokémon!</h2>
             <form method="POST" enctype="multipart/form-data">
                 <label for="nombre">Nombre:</label>
                 <input type="text" name="nombre" id="nombre" required>

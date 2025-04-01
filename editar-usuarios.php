@@ -1,13 +1,5 @@
 <?php
-// Verificar si el usuario está logueado
 session_start();
-unset($_SESSION['editar-usuarios']);
-
-if (!isset($_SESSION["usuario"])) {
-    header("Location: auth.php");
-    exit; // Termina el script si no está logueado
-}
-
 $servername = "localhost";
 $username = "admin";
 $password = "admin";
@@ -19,8 +11,17 @@ if ($conn->connect_error) {
     die("Conexión fallida: " . $conn->connect_error);
 }
 
-$sql = "SELECT ID_Usuario, Nombre, Apellidos, Correo, Nickname, Saldo FROM usuario";
+$sql = "SELECT Nombre, Apellidos, Correo, Nickname, Saldo FROM usuario WHERE ID_Usuario = {$_SESSION["editar-usuarios"]}";
 $result = $conn->query($sql);
+$row = $result->fetch_assoc();
+
+// Guardar cada campo en una variable
+$nombre = $row["Nombre"];
+$apellidos = $row["Apellidos"];
+$correo = $row["Correo"];
+$nickname = $row["Nickname"];
+$saldo = $row["Saldo"];
+
 ?>
 
 <!DOCTYPE html>
@@ -92,99 +93,7 @@ $result = $conn->query($sql);
             text-shadow: 3px 3px 5px #e60012; /* Sombra roja */
         }
 
-        .contenedor_usuarios {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            padding: 20px;
-        }
-        .carta_usuario {
-            position: relative;
-            background: #ffffff;
-            border: 3px solid #d92c2c;
-            border-radius: 12px;
-            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
-            margin: 18px;
-            padding: 15px;
-            text-align: center;
-            width: 90%;
-            max-width: 1500px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s ease-in-out;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        .carta_usuario:hover {
-            transform: scale(1.05);
-            box-shadow: 6px 6px 12px rgba(217, 44, 44, 0.5);
-        }
-        .carta_usuario p {
-            font-size: 14px;
-            color: #333;
-            font-weight: bold;
-            white-space: normal;
-            overflow: visible;
-            text-align: center;
-            word-break: break-word;
-            max-width: 100%;
-        }
-
-        .contenedor_botones {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            display: flex;
-            gap: 2px;
-            z-index: 10; /* Asegúrate de que el contenedor esté encima de otros elementos */
-        }
-
-        .eliminar_usuario, .editar {
-            position: relative;
-            background-color: transparent; /* Sin fondo */
-            color: inherit; /* Mantener el color heredado */
-            border: none; /* Eliminar borde */
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 50%; /* Circular */
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0; /* Eliminar cualquier padding */
-            box-sizing: border-box;
-            transition: background 0.3s ease;
-            z-index: 11;
-        }
-
-        .editar i {
-            background-color: blue;
-            border-radius: 50%; /* Hace circular el ícono */
-            width: 100%; /* Asegura que el ícono ocupe el 100% del botón */
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            background-color: rgb(74, 74, 239);
-        }
-
-        .eliminar_usuario{
-            color: white;
-            background-color: rgb(219, 57, 71);
-        }
-
-        .editar i:hover {
-            background-color: darkblue;
-        }
-
-        .eliminar_usuario:hover {
-            background-color: darkred;
-        }
+    
 
         footer {
         background-color: rgb(219, 57, 71);
@@ -250,34 +159,110 @@ $result = $conn->query($sql);
         </a>
     </nav>
 
-    <h1>Gestiona los usuarios de la web</h1>
+    <div class="form-container">
+    <form action="guardar-cambios.php" method="POST">
+        <!-- Nombre -->
+        <div class="input-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" value="<?php echo $nombre; ?>" required>
+        </div>
 
-    <div class="contenedor_usuarios">
-        <?php
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<div class='carta_usuario'>";
-                echo "<p><strong>ID:</strong> " . $row["ID_Usuario"] . " | ";
-                echo "<strong>Nombre:</strong> " . $row["Nombre"] . " | ";
-                echo "<strong>Apellidos:</strong> " . $row["Apellidos"] . " | ";
-                echo "<strong>Correo:</strong> " . $row["Correo"] . " | ";
-                echo "<strong>Nickname:</strong> " . $row["Nickname"] . " | ";
-                echo "<strong>Saldo:</strong> " . $row["Saldo"] . "</p>";
-                echo '<form method="POST" action="eliminar_al_usuario.php">';
-                echo '<input type="hidden" name="id_usuario" value="' . $row["ID_Usuario"] . '">';
-                echo '<div class="contenedor_botones">';
-                echo '<button type="submit" class="editar" name="editar" value="editar"><i class="fa-solid fa-pen"></i></button>';
-                echo '<button type="submit" class="eliminar_usuario" name="eliminar" value="eliminar">✖</button>';
-                echo '</div>';
-                echo '</form>';
-                echo "</div>";
-            }
-        } else {
-            echo "<p>No hay usuarios registrados.</p>";
-        }
-        $conn->close();
-        ?>
+        <!-- Apellidos -->
+        <div class="input-group">
+            <label for="apellidos">Apellidos</label>
+            <input type="text" id="apellidos" name="apellidos" value="<?php echo $apellidos; ?>" required>
+        </div>
+
+        <!-- Correo -->
+        <div class="input-group">
+            <label for="correo">Correo</label>
+            <input type="email" id="correo" name="correo" value="<?php echo $correo; ?>" required>
+        </div>
+
+        <!-- Nickname -->
+        <div class="input-group">
+            <label for="nickname">Nickname</label>
+            <input type="text" id="nickname" name="nickname" value="<?php echo $nickname; ?>" required>
+        </div>
+
+
+        <!-- Saldo -->
+        <div class="input-group">
+            <label for="saldo">Saldo</label>
+            <input type="number" id="saldo" name="saldo" value="<?php echo $saldo; ?>" required>
+        </div>
+
+        <!-- Botón de guardar -->
+        <div class="form-actions">
+            <button type="submit" class="guardar-btn">Guardar Cambios</button>
+        </div>
+    </form>
     </div>
+
+<style>
+    .form-container {
+        background-color: white; /* Fondo semitransparente */
+        padding: 30px;
+        border-radius: 15px;
+        border: 2px solid #e60012;
+        width: 400px;
+        margin: 50px auto;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container h1 {
+        color: rgb(219, 57, 71);
+        margin-bottom: 20px;
+        font-size: 2em;
+    }
+
+    .input-group {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .input-group label {
+        font-size: 1.1em;
+        color: rgb(219, 57, 71);
+        margin-bottom: 5px;
+    }
+
+    .input-group input {
+        padding: 10px;
+        font-size: 1em;
+        border: 2px solid rgb(219, 57, 71);
+        border-radius: 10px;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+
+    .input-group input:focus {
+        border-color: #e60012; /* Rojo cuando está enfocado */
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: center;
+    }
+
+    .guardar-btn {
+        background-color: rgb(219, 57, 71);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 1.1em;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .guardar-btn:hover {
+        background-color: #e60012;
+        transform: scale(1.05);
+    }
+</style>
+
     
  
     <footer>
