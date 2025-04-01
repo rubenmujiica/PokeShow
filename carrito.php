@@ -9,7 +9,7 @@
     $dbname = "pokeshop"; 
     $username = "admin"; 
     $password = "admin"; 
-        
+
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -31,6 +31,7 @@
     } else {
         $cartas = []; // Si el carrito está vacío
     }
+    $comprado = false;
     $total = 0;
 
     foreach($cartas as $carta)
@@ -57,6 +58,7 @@
                 $total = 0;
                 $_SESSION["Carrito"] = [];
                 $cartas = [];
+                $comprado = true;
             }
         }
         // else {
@@ -308,11 +310,17 @@
         </script>
         <?php unset($_SESSION["error_carrito_saldo"]); ?> 
     <?php endif; ?>
-    <?php if(empty($cartas)): ?>
+    <?php if(empty($cartas) && !$comprado): ?>
     <h1>¡Carrito vacío!</h1>
     <div class="contenedor_ventas_cartas">
         <img src="imgs/giphy.gif" alt="Pikachu triste" width="300">
+        <?php $comprado = false ?>
     </div>
+    <?php elseif($comprado): ?>
+        <h1>¡Gracias por la compra!</h1>
+        <div class="contenedor_ventas_cartas">
+            <img src="imgs/pikachu_feliz.gif" alt="Pikachu feliz" width="300">
+    </div>  
     <?php else: ?>
     <h1>¡Este es tu carrito!</h1>
     <div class="contenedor_ventas_cartas">
