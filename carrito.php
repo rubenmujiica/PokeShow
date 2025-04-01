@@ -47,14 +47,27 @@
                 exit;
             }
             else {
+                $stmt = $pdo->query("SELECT ID_Usuario, Precio FROM carta WHERE ID_Carta IN ($ids)");
+                $cartas_compradas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                foreach($cartas_compradas as $carta) {
+                    $stmt = $pdo->prepare("UPDATE usuario SET Saldo = Saldo + ? WHERE ID_Usuario = ?");
+                    $stmt->execute([$carta["Precio"], $carta["ID_Usuario"]]);   
+                }
+                
+                // Le doy la carta al usuario
                 $stmt = $pdo->prepare("UPDATE carta SET en_venta = 0, ID_Usuario = ? WHERE ID_Carta IN ($ids)");
                 $stmt->execute([$_SESSION["ID_Usuario"]]);
+                // Le quito el dinero
                 $stmt = $pdo->prepare("UPDATE usuario SET Saldo = Saldo -" . $total . " WHERE ID_Usuario =" . $_SESSION["ID_Usuario"]);
                 $stmt->execute();
+                // Actualizo el saldo de sesión
                 $stmt = $pdo->prepare("SELECT Saldo FROM usuario WHERE ID_Usuario = ?");
                 $stmt->execute([$_SESSION["ID_Usuario"]]);
                 $_SESSION["Saldo"] = $stmt->fetchColumn(); // Actualiza el saldo en la sesión
 
+
+                // Reinicio variables
                 $total = 0;
                 $_SESSION["Carrito"] = [];
                 $cartas = [];
