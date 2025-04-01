@@ -320,7 +320,7 @@
         <h1>¡Gracias por la compra!</h1>
         <div class="contenedor_ventas_cartas">
             <img src="imgs/pikachu_feliz.gif" alt="Pikachu feliz" width="300">
-    </div>  
+        </div>  
     <?php else: ?>
     <h1>¡Este es tu carrito!</h1>
     <div class="contenedor_ventas_cartas">
