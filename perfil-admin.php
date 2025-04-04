@@ -207,9 +207,8 @@ unset($_SESSION['error2']); //Borramos esta variable para que no haya conflictos
                 <button type='submit' class="editar" name="nickname"><i class="fa-solid fa-pen"></i></button>
             </p>
             <p class="perfil-completo">Contraseña: ****</p>
-            <p class="perfil-completo">Saldo en la cuenta: <?php echo $_SESSION['Saldo'] ?></p>
+            
             <div>
-                <button type='submit' class="botones-principales" name="ingresar-saldo">Ingresar saldo</button>
                 <button type='submit' class="botones-principales" name="cambiar-contrasena">¿Quieres cambiar tu contraseña?</button>
             </div>
         </div>
